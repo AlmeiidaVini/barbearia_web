@@ -4,6 +4,7 @@ import ServicosPage from '../pages/ServicosPage'
 import AgendamentoPage from '../pages/AgendamentoPage'
 import SobrePage from '../pages/SobrePage'
 import ContatoPage from '../pages/ContatoPage'
+import LoginPage from '../pages/LoginPage'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/agendamento" element={<AgendamentoPage />} />
         <Route path="/sobre" element={<SobrePage />} />
         <Route path="/contato" element={<ContatoPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   )
