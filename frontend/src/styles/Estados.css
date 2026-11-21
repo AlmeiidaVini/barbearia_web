@@ -1,0 +1,18 @@
+.estado {
+  margin-block: .5rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: .6rem;
+  font-size: .875rem;
+}
+
+.estado-erro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem .75rem;
+}
+
+.estado-erro p {
+  flex: 1 1 14rem;
+}

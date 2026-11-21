@@ -7,6 +7,7 @@ import ContatoPage from '../pages/ContatoPage'
 import LoginPage from '../pages/LoginPage'
 import { AuthProvider } from '../context/AuthContext'
 import PainelPage from '../pages/PainelPage'
+import MeusAgendamentosPage from '../pages/MeusAgendamentosPage'
 import ProtectedRoute from '../components/ProtectedRoute'
 import NotFoundPage from '../pages/NotFoundPage'
 
@@ -39,29 +40,12 @@ export default function App() {
             }
           />
 
-          {/*
-            Rota protegida de agendamentos.
-
-            Vinícius: responsável por configurar a rota.
-            Gabriel: responsável pela página de gerenciamento.
-
-            Quando Gabriel entregar MeusAgendamentosPage.jsx,
-            substituir o conteúdo temporário pelo componente dele.
-          */}
+          {/* Rota protegida configurada por Vinícius para a página de Gabriel. */}
           <Route
             path="/meus-agendamentos"
             element={
               <ProtectedRoute>
-                <main className="site-page">
-                  <section className="container">
-                    <h1>Meus Agendamentos</h1>
-
-                    <p>
-                      O gerenciamento de agendamentos
-                      será implementado pelo Gabriel.
-                    </p>
-                  </section>
-                </main>
+                <MeusAgendamentosPage />
               </ProtectedRoute>
             }
           />
