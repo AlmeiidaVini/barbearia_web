@@ -44,3 +44,21 @@ export async function login({ username, password }) {
     })
   }
 }
+
+ // Consulta a API para verificar se o token é válido.
+export async function getCurrentUser(token) {
+  const data = await request('/auth/me', {
+    method: 'GET',
+    token
+  })
+
+  // Retorna os dados do usuário autenticado.
+  return {
+    id: data.id,
+    username: data.username,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    image: data.image
+  }
+}

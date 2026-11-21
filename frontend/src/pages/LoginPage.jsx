@@ -1,11 +1,14 @@
-
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
+// Login pela API DummyJSON — Manu
 import { login } from '../services/authService'
+// Contexto de autenticação — Vinícius
+import { AuthContext } from '../context/authContextValue'
 import '../styles/Auth.css'
 
-// Verifica se os campos obrigatórios foram preenchidos
+// Verifica se os campos obrigatórios foram preenchidos.
 function validate({ username, password }) {
   const errors = {}
 
@@ -21,16 +24,30 @@ function validate({ username, password }) {
 }
 
 export default function LoginPage() {
+  // Acessa o contexto de autenticação.
+  const {
+    login: loginContext,
+    status
+  } = useContext(AuthContext)
+
+  // Permite navegar entre páginas.
+  const navigate = useNavigate()
+
+  // Guarda a página que o usuário queria acessar.
+  const location = useLocation()
+
+  // Armazena os campos do formulário.
   const [form, setForm] = useState({
     username: '',
     password: ''
   })
 
+  // Controla erros e carregamento.
   const [fieldErrors, setFieldErrors] = useState({})
   const [apiError, setApiError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // Atualiza os campos conforme o usuário digita
+  // Atualiza os campos conforme o usuário digita.
   function handleChange(event) {
     const { name, value } = event.target
 
@@ -47,7 +64,7 @@ export default function LoginPage() {
     setApiError('')
   }
 
-  // Valida os dados e solicita autenticação à API
+  // Valida os dados e realiza a autenticação.
   async function handleSubmit(event) {
     event.preventDefault()
 
@@ -62,16 +79,25 @@ export default function LoginPage() {
     setApiError('')
 
     try {
+      // 1. Envia usuário e senha para a API.
       const result = await login({
         username: form.username.trim(),
         password: form.password
       })
 
-      // Temporário: será integrado ao AuthContext do Vinicius
-      console.log('Login ok:', result.user)
+      // 2. Salva a autenticação no AuthContext.
+      loginContext(result)
+
+      // 3. Recupera o destino anterior.
+      const destino = location.state?.from || '/painel'
+
+      // 4. Redireciona para a página desejada.
+      navigate(destino, { replace: true })
 
     } catch (error) {
-      setApiError(error.message || 'Erro ao realizar login.')
+      setApiError(
+        error.message || 'Erro ao realizar login.'
+      )
     } finally {
       setLoading(false)
     }
@@ -97,7 +123,10 @@ export default function LoginPage() {
                 da API DummyJSON.
               </p>
 
-              <label htmlFor="username">Usuário</label>
+              <label htmlFor="username">
+                Usuário
+              </label>
+
               <input
                 id="username"
                 type="text"
@@ -114,7 +143,10 @@ export default function LoginPage() {
                 </span>
               )}
 
-              <label htmlFor="password">Senha</label>
+              <label htmlFor="password">
+                Senha
+              </label>
+
               <input
                 id="password"
                 type="password"
@@ -137,12 +169,17 @@ export default function LoginPage() {
                 </p>
               )}
 
-              <button type="submit" disabled={loading}>
+              <button
+                type="submit"
+                disabled={loading || status === 'loading'}
+              >
                 {loading ? 'Entrando...' : 'Entrar'}
               </button>
 
               <div className="auth-demo">
-                <strong>Credenciais de demonstração</strong>
+                <strong>
+                  Credenciais de demonstração
+                </strong>
                 <span>Usuário: emilys</span>
                 <span>Senha: emilyspass</span>
               </div>

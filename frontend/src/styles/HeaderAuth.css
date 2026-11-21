@@ -1,0 +1,42 @@
+
+/* Nome do usuário autenticado */
+.header-user {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Botão para encerrar a sessão */
+.header-logout {
+  background: transparent;
+  border: none;
+  color: #aaa6a1;
+
+  font: inherit;
+  font-size: 0.94rem;
+
+  padding: 10px 0;
+  cursor: pointer;
+
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.header-logout:hover,
+.header-logout:focus-visible {
+  color: #ffffff;
+}
+
+.header-logout:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 600px) {
+  .header-user,
+  .header-logout {
+    font-size: 0.85rem;
+  }
+}
