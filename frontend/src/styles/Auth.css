@@ -1,60 +1,91 @@
+/* =========================================================
+   Auth.css — estilos da tela de login
+   Usado por: frontend/src/pages/LoginPage.jsx
+   (importado lá com: import '../styles/Auth.css')
+   ========================================================= */
 
+
+/* ---------- ÁREA EXTERNA (a "coluna" central) ----------
+   No JSX: <section className="auth-section">
+   Define a largura máxima da coluna e a centraliza na tela. */
 .auth-section {
   width: 100%;
-  max-width: 420px;
-  margin: 72px auto;
-  padding: 0 16px;
+  max-width: 420px;      /* largura máxima da coluna do login */
+  margin: 72px auto;     /* 72px de espaço em cima/embaixo; "auto" centraliza */
+  padding: 0 16px;       /* respiro nas laterais em tela pequena */
 }
 
+/* No JSX: <div className="auth-layout">
+   Só faz o conteúdo ocupar toda a largura da coluna. */
 .auth-layout {
   width: 100%;
 }
 
+
+/* ---------- O CARTÃO DO FORMULÁRIO ----------
+   No JSX: <form className="auth-card">
+   É a caixa com borda que contém tudo (título, campos e botão). */
 .auth-card {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 32px;
-  border: 1px solid #444;
-  border-radius: 14px;
-  background-color: #101010;
-  color: #ffffff;
+  flex-direction: column;  /* empilha os itens um embaixo do outro */
+  gap: 12px;               /* espaço entre cada item */
+  padding: 32px;           /* espaço entre a borda e o conteúdo */
+  border: 1px solid #d4a15c;  /* COR DA BORDA do cartão (dourado) */
+  border-radius: 14px;     /* cantos arredondados */
+  background-color: #101010;  /* fundo do cartão */
+  color: #ffffff;          /* cor padrão dos textos dentro do cartão */
 }
 
+/* No JSX: <h1>Entrar</h1> */
 .auth-card h1 {
-  margin: 0;
+  margin: 0;               /* tira o espaço extra em cima do título */
 }
 
+/* No JSX: <p className="auth-note">Login demonstrativo...</p> */
 .auth-note {
-  color: #cccccc;
+  color: #cccccc;          /* cinza claro, mais discreto que o título */
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.5;        /* altura da linha (facilita a leitura) */
 }
 
+
+/* ---------- CAMPOS ----------
+   No JSX: <label htmlFor="username">Usuário</label> e o da Senha */
 .auth-card label {
-  font-weight: 600;
+  font-weight: 600;        /* texto "Usuário" e "Senha" em negrito leve */
 }
 
+/* No JSX: <input id="username" /> e <input id="password" /> */
 .auth-card input {
   width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  border: 1px solid #777;
+  box-sizing: border-box;  /* faz o padding não aumentar a largura total */
+  padding: 12px;           /* espaço interno do campo */
+  border: 1px solid #ffffff;  /* borda do campo */
   border-radius: 8px;
-  background-color: #ffffff;
-  color: #111111;
-  font: inherit;
+  background-color: #3b3a3a;  /* FUNDO do campo (branco) */
+  color: #cccccc;             /* COR do texto que a pessoa digita */
+  font: inherit;           /* usa a mesma fonte do site */
 }
 
+/* Campo com erro: o JSX coloca aria-invalid="true" quando a
+   validação falha (campo vazio). Aí a borda fica vermelha. */
 .auth-card input[aria-invalid="true"] {
   border-color: #ff7777;
 }
 
+
+/* ---------- MENSAGENS ---------- */
+
+/* No JSX: <span className="auth-field-error">
+   É o "Informe o usuário." / "Informe a senha." embaixo de cada campo. */
 .auth-field-error {
   color: #ff7777;
   font-size: 13px;
 }
 
+/* No JSX: <p className="auth-error" role="alert">
+   É a mensagem que vem da API (ex.: "Usuário ou senha inválidos."
+   ou "Não foi possível conectar ao servidor"). */
 .auth-error {
   color: #ff7777;
   border: 1px solid #ff7777;
@@ -63,42 +94,69 @@
   font-size: 14px;
 }
 
-.auth-card button {
-  background-color: #e63946;
+/* No JSX: <p className="auth-info" role="status">
+   É o aviso do AuthContext (ex.: "Sessão expirada, entre novamente.").
+   Só aparece quando existe sessionMessage. */
+.auth-info {
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #777;
+  border-radius: 8px;
+  background-color: #1b1b1b;
   color: #ffffff;
+  font-size: 14px;
+}
+
+
+/* ---------- BOTÃO "ENTRAR" ----------
+   No JSX: <button type="submit">Entrar</button> */
+.auth-card button {
+  background-color: #dd9a3d;  /* COR DO BOTÃO (dourado) */
+  color: #ffffff;             /* COR DO TEXTO do botão */
   border: none;
   border-radius: 8px;
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
+  cursor: pointer;            /* mãozinha ao passar o mouse */
 }
 
+/* Quando o mouse está em cima do botão. */
 .auth-card button:hover {
-  background-color: #c92a36;
+  background-color: #807e7e;  /* COR DO BOTÃO COM O MOUSE EM CIMA (cinza) */
 }
 
+/* Botão desativado: o JSX usa disabled={loading || status === 'loading'},
+   ou seja, enquanto está "Entrando...". Fica meio apagado. */
 .auth-card button:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
+  cursor: not-allowed;        /* cursor de "proibido" */
 }
 
+
+/* ---------- CREDENCIAIS DE DEMONSTRAÇÃO ----------
+   No JSX: <div className="auth-demo"> com o usuário e senha de teste,
+   no rodapé do cartão. */
 .auth-demo {
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding-top: 16px;
-  border-top: 1px solid #444;
+  border-top: 1px solid #444;  /* linha que separa do resto do cartão */
   color: #cccccc;
   font-size: 13px;
 }
 
+
+/* ---------- TELA PEQUENA (celular) ----------
+   Estas regras só valem quando a tela tem até 480px de largura.
+   Deixe SEMPRE por último: assim elas vencem as regras de cima. */
 @media (max-width: 480px) {
   .auth-section {
-    margin: 32px auto;
+    margin: 32px auto;       /* menos espaço em cima/embaixo */
   }
 
   .auth-card {
-    padding: 24px 20px;
+    padding: 24px 20px;      /* cartão com menos espaço interno */
   }
 }

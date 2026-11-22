@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+// Navigate redireciona quem já está logado; os outros dois já existiam.
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 // Login pela API DummyJSON — Manu
@@ -25,9 +26,11 @@ function validate({ username, password }) {
 
 export default function LoginPage() {
   // Acessa o contexto de autenticação.
+  // sessionMessage traz avisos como "Sessão expirada, entre novamente."
   const {
     login: loginContext,
-    status
+    status,
+    sessionMessage
   } = useContext(AuthContext)
 
   // Permite navegar entre páginas.
@@ -35,6 +38,11 @@ export default function LoginPage() {
 
   // Guarda a página que o usuário queria acessar.
   const location = useLocation()
+
+  // Página para onde a pessoa vai depois de entrar.
+  // Se ela tentou abrir uma rota protegida, volta para essa rota;
+  // senão, vai para o painel.
+  const destino = location.state?.from || '/painel'
 
   // Armazena os campos do formulário.
   const [form, setForm] = useState({
@@ -88,10 +96,7 @@ export default function LoginPage() {
       // 2. Salva a autenticação no AuthContext.
       loginContext(result)
 
-      // 3. Recupera o destino anterior.
-      const destino = location.state?.from || '/painel'
-
-      // 4. Redireciona para a página desejada.
+      // 3. Redireciona para a página desejada.
       navigate(destino, { replace: true })
 
     } catch (error) {
@@ -101,6 +106,14 @@ export default function LoginPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Quem já está logado não precisa ver o formulário.
+  // Este "if" fica DEPOIS de todos os hooks (useContext, useNavigate,
+  // useLocation e useState), porque o React exige que os hooks sejam
+  // chamados sempre na mesma ordem, em toda renderização.
+  if (status === 'authenticated') {
+    return <Navigate to={destino} replace />
   }
 
   return (
@@ -122,6 +135,14 @@ export default function LoginPage() {
                 Login demonstrativo com usuários fictícios
                 da API DummyJSON.
               </p>
+
+              {/* Aviso vindo do AuthContext, por exemplo quando
+                  a sessão expirou e a pessoa foi enviada ao login. */}
+              {sessionMessage && (
+                <p className="auth-info" role="status">
+                  {sessionMessage}
+                </p>
+              )}
 
               <label htmlFor="username">
                 Usuário
