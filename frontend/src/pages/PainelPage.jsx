@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useEffect, useEffectEvent, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/authContextValue'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
@@ -11,9 +11,15 @@ import { usersFallback } from '../data/usersFallback'
 import '../styles/Panel.css'
 
 export default function PainelPage() {
-  const { user, sessionMessage } = useContext(AuthContext)
+  const { user, sessionMessage, logout } = useContext(AuthContext)
+  const navigate = useNavigate()
   const [result, setResult] = useState({ status: 'loading', users: [] })
   const [attempt, setAttempt] = useState(0)
+
+  const handleUnauthorized = useEffectEvent(() => {
+    logout()
+    navigate('/login', { replace: true })
+  })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -29,8 +35,12 @@ export default function PainelPage() {
       })
       .catch((error) => {
         if (controller.signal.aborted) return
-        if (error.status === 401 || error.status === 403) {
-          setResult({ status: 'error', code: error.status, users: [] })
+        if (error.status === 401) {
+          handleUnauthorized()
+          return
+        }
+        if (error.status === 403) {
+          setResult({ status: 'forbidden', users: [] })
           return
         }
         setResult({ status: 'fallback', users: usersFallback.users })
@@ -62,25 +72,27 @@ export default function PainelPage() {
         <section className="panel-people" aria-labelledby="users-heading">
           <h2 id="users-heading">Pessoas</h2>
           {result.status === 'loading' && <LoadingState>Carregando usuários…</LoadingState>}
+          {(result.status === 'ready' || result.status === 'empty') && (
+            <p className="panel-source">Dados remotos — DummyJSON (usuários fictícios, não são clientes da barbearia)</p>
+          )}
           {result.status === 'empty' && <EmptyState>Nenhum usuário encontrado.</EmptyState>}
-          {result.status === 'error' && (
-            <ErrorState onRetry={retry}>
-              {result.code === 401
-                ? 'A API exige autenticação (401). Entre novamente para continuar.'
-                : 'A API negou o acesso à lista de usuários (403).'}
-            </ErrorState>
+          {result.status === 'forbidden' && (
+            <ErrorState onRetry={retry}>A API negou o acesso à lista de usuários (403).</ErrorState>
           )}
           {result.status === 'fallback' && (
-            <ErrorState onRetry={retry}>API indisponível. Exibindo dados de contingência.</ErrorState>
+            <>
+              <p className="panel-source">Dados de contingência (simulados)</p>
+              <ErrorState onRetry={retry}>API indisponível.</ErrorState>
+            </>
           )}
           {result.users.length > 0 && (
             <ul className="panel-users">
-              {result.users.map((item, index) => {
-                const { firstName, lastName } = usersFallback.users[index]
+              {result.users.map((item) => {
+                const { firstName = '', lastName = '' } = item
                 return (
                   <li key={item.id}>
                     <span className="panel-avatar" aria-hidden="true">
-                      {firstName[0]}{lastName[0]}
+                      {firstName?.[0] || ''}{lastName?.[0] || ''}
                       {item.image && (
                         <img src={item.image} alt="" width="28" height="28" onError={(event) => {
                           event.currentTarget.hidden = true

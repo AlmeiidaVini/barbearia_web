@@ -44,6 +44,11 @@
   margin-block: 0 .6rem;
 }
 
+.panel-people .panel-source {
+  margin-bottom: .65rem;
+  font-size: .875rem;
+}
+
 .panel-users {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
