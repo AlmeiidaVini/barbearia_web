@@ -131,10 +131,9 @@ export default function LoginPage() {
             >
               <h1>Entrar</h1>
 
-              <p className="auth-note">
-                Login demonstrativo com usuários fictícios
-                da API DummyJSON.
-              </p>
+              <strong className="auth-note" style={{ fontSize: '13PX' }}>
+                Insira seu Usuário e Senha para acessar sua conta.
+              </strong>
 
               {/* Aviso vindo do AuthContext, por exemplo quando
                   a sessão expirou e a pessoa foi enviada ao login. */}
@@ -196,14 +195,6 @@ export default function LoginPage() {
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </button>
-
-              <div className="auth-demo">
-                <strong>
-                  Credenciais de demonstração
-                </strong>
-                <span>Usuário: emilys</span>
-                <span>Senha: emilyspass</span>
-              </div>
 
             </form>
           </div>
